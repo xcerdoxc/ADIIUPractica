@@ -46,6 +46,5 @@
     overflow-x: auto;
     text-align: left;
     white-space: nowrap;
-    float: left;
     -webkit-overflow-scrolling: touch;
   }
