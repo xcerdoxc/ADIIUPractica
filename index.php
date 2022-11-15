@@ -20,10 +20,7 @@
   <!---
       Añadir jquery
     -->
-  <script src="./javascript/grap.js"></script>
-</head>
-
-<?php
+  <?php
   $con = mysqli_connect("localhost","root","") or die("Localhost no disponible");
   $db = mysqli_select_db($con,"nova") or die("Base de dades no disponible");
   $cadena = "select * from nova where nova.ID=1";
@@ -33,7 +30,10 @@
   $file = 'json/selectProva.json';
   file_put_contents($file, $json );
 ?>
-<body>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+  <script src="./javascript/grap.js"></script>
+</head>
+
   <header>
     <!----
   <div class="collapse bg-dark" id="navbarHeader">
