@@ -16,12 +16,25 @@ $( document ).ready(function() {
         alert("json not found");
     }
   });
+
   $.ajax({
     type: "Get",
     url: "php/select2.php",
     dataType: "json",
     success: function(data) {
       pieChar(data);
+    },
+    error: function(){
+        alert("json not found");
+    }
+  });
+
+  $.ajax({
+    type: "Get",
+    url: "php/select3.php",
+    dataType: "json",
+    success: function(data) {
+      box(data);
     },
     error: function(){
         alert("json not found");
@@ -43,9 +56,6 @@ function barresCol(data){
         },
         title: {
           text: ''
-        },
-        subtitle: {
-          text: 'Source: <a href="https://worldpopulationreview.com/world-cities" target="_blank">World Population Review</a>'
         },
         xAxis: {
           type: 'category',
@@ -154,77 +164,49 @@ function pieChar(data){
   });
 }
 
-function box(){
-    Highcharts.chart('container3', {
+function box(data){
+  var dat2= [];
+  for (var i = 0; i < data.length; i++){
+    var obj = JSON.parse(JSON.stringify(data[i]));
+    obj.sqft_above=parseInt(obj.sqft_above);
+    dat2.push(obj.sqft_above);
+  }
+  Highcharts.chart('container3', {
 
-        chart: {
-          type: 'boxplot'
+    title: {
+      text: 'Sqft abrove of buldings of 1 floor'
+    },
+  
+    
+  
+    plotOptions: {
+      series: {
+        label: {
+          connectorAllowed: false
         },
+        pointStart: 2010
+      }
+    },
+  
+    series: [{
       
-        title: {
-          text: 'Highcharts Box Plot Example'
+      data: dat2
+    }, ],
+  
+    responsive: {
+      rules: [{
+        condition: {
+          maxWidth: 500
         },
-      
-        legend: {
-          enabled: false
-        },
-      
-        xAxis: {
-          categories: ['1', '2', '3', '4', '5'],
-          title: {
-            text: 'Experiment No.'
+        chartOptions: {
+          legend: {
+            layout: 'horizontal',
+            align: 'center',
+            verticalAlign: 'bottom'
           }
-        },
-      
-        yAxis: {
-          title: {
-            text: 'Observations'
-          },
-          plotLines: [{
-            value: 932,
-            color: 'red',
-            width: 1,
-            label: {
-              text: 'Theoretical mean: 932',
-              align: 'center',
-              style: {
-                color: 'gray'
-              }
-            }
-          }]
-        },
-      
-        series: [{
-          name: 'Observations',
-          data: [
-            [760, 801, 848, 895, 965],
-            [733, 853, 939, 980, 1080],
-            [714, 762, 817, 870, 918],
-            [724, 802, 806, 871, 950],
-            [834, 836, 864, 882, 910]
-          ],
-          tooltip: {
-            headerFormat: '<em>Experiment No {point.key}</em><br/>'
-          }
-        }, {
-          name: 'Outliers',
-          color: Highcharts.getOptions().colors[0],
-          type: 'scatter',
-          data: [ // x, y positions where 0 is the first category
-            [0, 644],
-            [4, 718],
-            [4, 951],
-            [4, 969]
-          ],
-          marker: {
-            fillColor: 'white',
-            lineWidth: 1,
-            lineColor: Highcharts.getOptions().colors[0]
-          },
-          tooltip: {
-            pointFormat: 'Observation: {point.y}'
-          }
-        }]
-      
-      });
+        }
+      }]
+    }
+  
+  });
 }
