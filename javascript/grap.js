@@ -6,6 +6,7 @@
 //Grafic de barres 
 
 function barresCol(){
+  
     Highcharts.chart('container', {
         chart: {
           type: 'column'

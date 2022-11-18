@@ -24,18 +24,18 @@
   $con = mysqli_connect("localhost","root","") or die("Localhost no disponible");
   $db = mysqli_select_db($con,"nova") or die("Base de dades no disponible");
   
-  $primerSelect = "SELECT  
-	  COUNT(CASE WHEN nova.floors = 1 THEN 1 END),
-    COUNT(CASE WHEN nova.floors = 2 THEN 1 END),
-    COUNT(CASE WHEN nova.floors = 3 THEN 1 END),
-    COUNT(CASE WHEN nova.floors = 4 THEN 1 END),
-    COUNT(CASE WHEN nova.floors = 5 THEN 1 END),
-    COUNT(CASE WHEN nova.floors = 6 THEN 1 END),
-    COUNT(CASE WHEN nova.floors <= 7 THEN 1 END)
-     from nova;";
+  $primerSelect = "SELECT 
+  nova.floors, COUNT(*)as numFl from nova JOIN
+  (SELECT DISTINCT nova.floors FROM nova) 
+  as floors on floors.floors=nova.floors 
+  GROUP by floors
+  ORDER by numFl DESC;";
   $respuesta = mysqli_query($con, $primerSelect);
-  $row = mysqli_fetch_array($respuesta);
-  $json1 = json_encode($row);
+  $dades=array();
+  while($row = mysqli_fetch_array($respuesta)){
+    array_push($dades,$row);
+ }
+  $json1 = json_encode($dades);
   $file = 'json/selectBarres.json';
   file_put_contents($file, $json1 );
 
@@ -47,12 +47,11 @@
       GROUP by zipcode
    ORDER BY loc DESC;";
    $respuesta = mysqli_query($con, $segonSelect);
-   $row = mysqli_fetch_array($respuesta);
-   $dades=array();
+   $dades2=array();
    while($row = mysqli_fetch_array($respuesta)){
-      array_push($dades,$row);
+      array_push($dades2,$row);
    }
-   $json2 = json_encode($dades);
+   $json2 = json_encode($dades2);
    $file = 'json/selectPiechart.json';
    file_put_contents($file, $json2);
 ?>
