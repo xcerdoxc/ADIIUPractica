@@ -7,7 +7,7 @@
 $( document ).ready(function() {
   $.ajax({
     type: "Get",
-    url: "select1.php",
+    url: "php/select1.php",
     dataType: "json",
     success: function(data) {
         barresCol(data);
@@ -18,7 +18,7 @@ $( document ).ready(function() {
   });
   $.ajax({
     type: "Get",
-    url: "select2.php",
+    url: "php/select2.php",
     dataType: "json",
     success: function(data) {
       pieChar(data);
@@ -42,7 +42,7 @@ function barresCol(data){
           type: 'column'
         },
         title: {
-          text: 'World\'s largest cities per 2021'
+          text: ''
         },
         subtitle: {
           text: 'Source: <a href="https://worldpopulationreview.com/world-cities" target="_blank">World Population Review</a>'
@@ -60,14 +60,14 @@ function barresCol(data){
         yAxis: {
           min: 0,
           title: {
-            text: 'Population (millions)'
+            text: 'Number of buldings'
           }
         },
         legend: {
           enabled: false
         },
         tooltip: {
-          pointFormat: 'Population in 2021: <b>{point.y:.1f} millions</b>'
+          pointFormat: 'Number of buildings: <b>{point.y:.1f} </b>'
         },
         series: [{
           name: 'Population',
@@ -89,67 +89,67 @@ function barresCol(data){
        
 }
 function pieChar(data){
-Highcharts.chart('container2', {
+  var dat1 = [];
+  var dat2= [];
+  for (var i = 0; i < data.length; i++){
+    var obj = JSON.parse(JSON.stringify(data[i]));
+    obj.loc=parseInt(obj.loc);
+    dat1.push(obj.bathrooms);
+    dat2.push(obj.loc);
+  }
+  Highcharts.chart('container2', {
     chart: {
-      plotBackgroundColor: null,
-      plotBorderWidth: null,
-      plotShadow: false,
-      type: 'pie'
+      type: 'bar'
     },
     title: {
-      text: 'Browser market shares in May, 2020'
+      text: 'Summation of number of bathrooms on a bulding'
     },
-    tooltip: {
-      pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
-    },
-    accessibility: {
-      point: {
-        valueSuffix: '%'
+    
+    xAxis: {
+      categories: dat1,
+      title: {
+        text: 'Number of bathrooms on a bulding'
       }
     },
+    yAxis: {
+      min: 0,
+      title: {
+        text: 'Bathrooms',
+        align: 'high'
+      },
+      labels: {
+        overflow: 'justify'
+      }
+    },
+    tooltip: {
+      valueSuffix: ' millions'
+    },
     plotOptions: {
-      pie: {
-        allowPointSelect: true,
-        cursor: 'pointer',
+      bar: {
         dataLabels: {
-          enabled: true,
-          format: '<b>{point.name}</b>: {point.percentage:.1f} %'
+          enabled: true
         }
       }
     },
+    legend: {
+      layout: 'vertical',
+      align: 'right',
+      verticalAlign: 'top',
+      x: -40,
+      y: 80,
+      floating: true,
+      borderWidth: 1,
+      backgroundColor:
+        Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF',
+      shadow: true
+    },
+    credits: {
+      enabled: false
+    },
     series: [{
-      name: 'Brands',
-      colorByPoint: true,
-      data: [{
-        name: 'Chrome',
-        y: 70.67,
-        sliced: true,
-        selected: true
-      }, {
-        name: 'Edge',
-        y: 14.77
-      },  {
-        name: 'Firefox',
-        y: 4.86
-      }, {
-        name: 'Safari',
-        y: 2.63
-      }, {
-        name: 'Internet Explorer',
-        y: 1.53
-      },  {
-        name: 'Opera',
-        y: 1.40
-      }, {
-        name: 'Sogou Explorer',
-        y: 0.84
-      }, {
-        name: 'QQ',
-        y: 0.51
-      }, {
-        name: 'Other',
-        y: 2.6
-      }]
+      name: 'Number of Buildings',
+      data: dat2
+    
     }]
   });
 }

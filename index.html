@@ -20,26 +20,7 @@
   <!---
       Añadir jquery
     -->
-  <?php
-  $con = mysqli_connect("localhost","root","") or die("Localhost no disponible");
-  $db = mysqli_select_db($con,"nova") or die("Base de dades no disponible");
-
-  $segonSelect="SELECT 
-    nova.zipcode,COUNT(*) as loc from nova JOIN
-      (SELECT DISTINCT nova.zipcode 
-        FROM nova) AS zips 
-        ON nova.zipcode=zips.zipcode 
-      GROUP by zipcode
-   ORDER BY loc DESC;";
-   $respuesta = mysqli_query($con, $segonSelect);
-   $dades2=array();
-   while($row = mysqli_fetch_array($respuesta)){
-      array_push($dades2,$row);
-   }
-   $json2 = json_encode($dades2);
-   $file = 'json/selectPiechart.json';
-   file_put_contents($file, $json2);
-?>
+ 
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
   <script src="./javascript/grap.js"></script>
 </head>
@@ -175,8 +156,6 @@
 
 
 <script>
-  
-  document.addEventListener("DOMContentLoaded", function () { pieChar() })
   document.addEventListener("DOMContentLoaded", function () { box() })
 </script>
 
