@@ -23,21 +23,6 @@
   <?php
   $con = mysqli_connect("localhost","root","") or die("Localhost no disponible");
   $db = mysqli_select_db($con,"nova") or die("Base de dades no disponible");
-  
-  $primerSelect = "SELECT 
-  nova.floors, COUNT(*)as numFl from nova JOIN
-  (SELECT DISTINCT nova.floors FROM nova) 
-  as floors on floors.floors=nova.floors 
-  GROUP by floors
-  ORDER by numFl DESC;";
-  $respuesta = mysqli_query($con, $primerSelect);
-  $dades=array();
-  while($row = mysqli_fetch_array($respuesta)){
-    array_push($dades,$row);
- }
-  $json1 = json_encode($dades);
-  $file = 'json/selectBarres.json';
-  file_put_contents($file, $json1 );
 
   $segonSelect="SELECT 
     nova.zipcode,COUNT(*) as loc from nova JOIN
@@ -190,7 +175,7 @@
 
 
 <script>
-  document.addEventListener("DOMContentLoaded", function () { barresCol() })
+  
   document.addEventListener("DOMContentLoaded", function () { pieChar() })
   document.addEventListener("DOMContentLoaded", function () { box() })
 </script>
